@@ -1,0 +1,65 @@
+import  mongoose, {Schema, Mongoose} from "mongoose";
+//import { IFilm } from "../films/dto/films.dto";
+/*TODO : DELETE*/
+/*
+interface IDbFilm extends Omit<IFilm,'id'> {
+  _id: mongoose.ObjectId;
+}
+
+export type UserDocument = mongoose.Document<unknown, {}, IDbFilm> &
+IDbFilm &
+  Required<{
+    _id: mongoose.Schema.Types.ObjectId;
+  }>;
+
+const ScheduleSchema = new Schema({
+  //id: { type: String, required: true },
+  daytime: { type: Date, required: true },
+  hall: { type: String, required: true },
+  rows: { type: Number, required: true },
+  seats: { type: Number, required: true },
+  price: { type: Number, required: true },
+  taken: { type: [String], required: true },
+});
+
+const FilmSchema = new mongoose.Schema({
+  //id: { type: String, required: true },
+  rating: { type: Number, required: true },
+  director: { type: String, required: true },
+  tags: { type: [String], required: true },
+  image: { type: String, required: true },
+  cover: { type: String, required: true },
+  title: { type: String, required: true },
+  about: { type: String, required: true },
+  description: { type: String, required: true },
+  schedule: { type: [ScheduleSchema], required: true }
+});
+
+const Film = mongoose.model('Film', FilmSchema);
+
+export default Film;
+
+//имплементируем интерфейс вместо прежнего варианта с классом
+export class FilmsMongoDbRepository {
+    constructor(private connection: Mongoose) {
+    }
+
+    private getFilmMapperFn(): (Film) => GetFilmDTO {
+        return root => {
+            return {
+                id: root._id
+                //далее конвертация сущности в DTO
+            }
+        }
+    }
+
+    async findAll(): Promise<GetFilmsDTO> {
+        let items = await Film.find({}) //используем обычные методы Mongoose-документов
+        let total = await Film.countDocuments({})
+        return {
+            total,
+            items: items.map(this.getFilmMapperFn())
+        }
+    }
+}
+*/
