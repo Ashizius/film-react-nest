@@ -6,9 +6,7 @@ import * as path from 'node:path';
 import { configProvider } from './app.config.provider';
 import { FilmsController } from './films/films.controller';
 import { OrderController } from './order/order.controller';
-import { FilmsRepository } from './repository/films.repository';
 import { FilmsService } from './films/films.service';
-import { Repository } from './repository/repository';
 import { RepositoryModule } from './repository/repository.module';
 import { OrderService } from './order/order.service';
 
@@ -21,8 +19,9 @@ import { OrderService } from './order/order.service';
     ServeStaticModule.forRoot({
       // раздача статических файлов из public
       rootPath: path.join(__dirname, '..', 'public'),
-      serveStaticOptions: { //кеширование
-        maxAge: 10*1000, // милисекунды
+      serveStaticOptions: {
+        //кеширование
+        maxAge: 10 * 1000, // милисекунды
       },
     }),
     RepositoryModule,
@@ -31,4 +30,3 @@ import { OrderService } from './order/order.service';
   providers: [configProvider, FilmsService, OrderService],
 })
 export class AppModule {}
-

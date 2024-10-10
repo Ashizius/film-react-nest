@@ -9,12 +9,6 @@ export class Repository {
     @Inject('CONFIG') private readonly config: AppConfig,
     public readonly filmsRepository: FilmsRepository,
   ) {
-    console.log(config.database.url);
-
-    /*const { PORT = 3000, DB_ADDRESS = 'mongodb://127.0.0.1:27017/weblarek' } =
-      process.env;*/
-
-    mongoose.connect(config.database.url); // подключаемся к серверу MongoDB
-    const db = mongoose.connection;
+    mongoose.connect(this.config.database.url); // подключаемся к серверу MongoDB
   }
 }

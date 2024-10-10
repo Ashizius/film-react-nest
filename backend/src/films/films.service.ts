@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { FilmsRepository } from '../repository/films.repository';
 import { GetFilmsDTO, GetScheduleDTO } from './dto/films.dto';
 import { Repository } from '../repository/repository';
 
