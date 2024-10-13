@@ -9,6 +9,15 @@ export class Repository {
     @Inject('CONFIG') private readonly config: AppConfig,
     public readonly filmsRepository: FilmsRepository,
   ) {
-    mongoose.connect(this.config.database.url); // подключаемся к серверу MongoDB
+    this.connectToDatabase(); // подключаемся к серверу MongoDB
+  }
+
+  private async connectToDatabase() {
+    try {
+      await mongoose.connect(this.config.database.url);
+      console.log('Successfully connected to the database');
+    } catch (error) {
+      console.error('Error connecting to the database', error);
+    }
   }
 }

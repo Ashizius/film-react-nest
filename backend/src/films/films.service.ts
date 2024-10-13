@@ -8,7 +8,10 @@ export class FilmsService {
   async findAll(): Promise<GetFilmsDTO> {
     const [total, films] = await this.repository.filmsRepository.findAll();
     if (total === 0) {
-      throw new NotFoundException('фильмов не найдено');
+      return {
+        items: [],
+        total: 0,
+      };
     }
     return {
       items: films,
