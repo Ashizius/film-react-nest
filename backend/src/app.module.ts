@@ -11,17 +11,16 @@ import { RepositoryModule } from './repository/repository.module';
 import { OrderService } from './order/order.service';
 import configuration from './configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppConfig } from './app.config.provider';
 import { ConfigService } from '@nestjs/config';
-import { Films } from './repository/postgres/films.enity';
-import { Schedules } from './repository/postgres/schedules.entity';
+import { Films } from './repository/entities/films.enity';
+import { Schedules } from './repository/entities/schedules.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
-      load: [configuration]
+      load: [configuration],
     }),
     ServeStaticModule.forRoot({
       // раздача статических файлов из public
@@ -32,23 +31,29 @@ import { Schedules } from './repository/postgres/schedules.entity';
       },
     }),
     RepositoryModule,
-        // Configure TypeOrmModule to access DatabaseModule using an async factory function
-        TypeOrmModule.forRootAsync({
-          // Import the AppConfigModule
-          //imports: [AppConfigModule],
-          // Inject ConfigService to dynamically retrieve configuration
-          inject: [ConfigService],
-          useFactory: async (configService: ConfigService) => ({
-            type: 'postgres',//configService.get<'postgres'|'mongodb'>("DATABASE_DRIVER",'postgres'), //Тип драйвера Postgres
-            host: 'localhost', //Адрес сервера базы данных
-            port: configService.get("DATABASE_PORT", 5432), //Postgres порт
-            username: 'prac', //Логин и пароль пользователя,
-            password: 'prac', //  для доступа к БД.
-            database: 'prac', //Имя базы данных
-            entities: [Films, Schedules], //сущности, которые описывают нашу базу данных
-            synchronize: false, //означает, что при старте приложение будет подгонять базу в СУБД к той, что описана в ORM. Удобно для
-          }),
-        }),
+    // Configure TypeOrmModule to access DatabaseModule using an async factory function
+    TypeOrmModule.forRootAsync({
+      // Import the AppConfigModule
+      //imports: [AppConfigModule],
+      // Inject ConfigService to dynamically retrieve configuration
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        const dbType = configService.get<'postgres'>(
+          'DATABASE_DRIVER',
+          'postgres',
+        );
+        return {
+          type: dbType, //Тип драйвера Postgres
+          host: configService.get('DATABASE_HOST', 'localhost'), //Адрес сервера базы данных
+          port: configService.get('DATABASE_PORT', 5432), //Postgres порт
+          username: configService.get('DATABASE_USERNAME', 'prac'), //Логин и пароль пользователя,
+          password: configService.get('DATABASE_PASSWORD', 'prac'), //  для доступа к БД.
+          database: configService.get('DATABASE_DATABASE', 'prac'), //Имя базы данных
+          entities: [Films, Schedules], //сущности, которые описывают нашу базу данных
+          synchronize: false,
+        };
+      },
+    }),
   ],
   controllers: [FilmsController, OrderController],
   providers: [ConfigProvider, FilmsService, OrderService],

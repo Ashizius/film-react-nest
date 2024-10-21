@@ -7,12 +7,6 @@ export class FilmsService {
   constructor(private readonly repository: RepositoryProvider) {}
   async findAll(): Promise<GetFilmsDTO> {
     const [total, films] = await this.repository.getFilms();
-    if (total === 0) {
-      return {
-        items: [],
-        total: 0,
-      };
-    }
     return {
       items: films,
       total: total,
