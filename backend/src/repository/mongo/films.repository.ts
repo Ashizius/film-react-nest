@@ -1,32 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import mongoose from 'mongoose';
-import { ITicket } from '../order/dto/order.dto';
-
-export interface ISchedule {
-  id: string;
-  daytime: string;
-  hall: string;
-  rows: number;
-  seats: number;
-  price: number;
-  taken: string[];
-}
+import { faker } from '@faker-js/faker';
+import { ITicket } from '../../order/dto/order.dto';
+import { IFilm, ISchedule } from '../../films/dto/films.dto';
+import { IFilmRepository } from '../repository.provider';
 
 interface IDbSchedule extends ISchedule {
   _id: mongoose.Types.ObjectId;
-}
-
-export interface IFilm {
-  id: string;
-  rating: number;
-  director: string;
-  tags: string[];
-  image: string;
-  cover: string;
-  title: string;
-  about: string;
-  description: string;
-  schedule: ISchedule[];
 }
 
 interface IDbFilm extends Omit<IFilm, 'schedule'> {
@@ -77,7 +57,7 @@ const FilmSchema = new mongoose.Schema({
 const filmModel = mongoose.model<IDbFilm>('Film', FilmSchema);
 
 @Injectable()
-export class FilmsRepository {
+export class FilmsRepository implements IFilmRepository {
   private getScheduleMapperFn(schedule: IDbSchedule): ISchedule {
     delete schedule['_id'];
     return schedule;
@@ -168,6 +148,17 @@ export class FilmsRepository {
     const orders: IDbOrdered[] = await Promise.all(
       tickets.map(this.bookTicket.bind(this)),
     );
-    return orders;
+    return orders.map((document) => {
+      const session = document.schedule[0];
+      return {
+        film: document.id,
+        session: session.id,
+        daytime: session.daytime,
+        row: Number(document.takenRow),
+        seat: Number(document.takenSeat),
+        price: session.price,
+        id: faker.string.uuid(),
+      };
+    });
   }
 }

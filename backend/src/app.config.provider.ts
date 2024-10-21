@@ -1,6 +1,6 @@
 import { ConfigModule } from '@nestjs/config';
 
-export const configProvider = {
+export const ConfigProvider = {
   imports: [ConfigModule.forRoot()],
   provide: 'CONFIG',
   useValue: <AppConfig>{

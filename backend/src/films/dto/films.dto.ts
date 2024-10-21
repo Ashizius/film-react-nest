@@ -1,6 +1,3 @@
-//TODO описать DTO для запросов к /films
-
-import { IFilm, ISchedule } from '../../repository/films.repository';
 
 export class GetScheduleDTO {
   items: ISchedule[];
@@ -14,4 +11,27 @@ export class GetFilmsDTO {
   get total(): number {
     return this.items.length;
   }
+}
+
+export interface IFilm {
+  id: string;
+  rating: number;
+  director: string;
+  tags: string[];
+  image: string;
+  cover: string;
+  title: string;
+  about: string;
+  description: string;
+  schedule: ISchedule[];
+}
+
+export interface ISchedule {
+  id: string;
+  daytime: string;
+  hall: number;
+  rows: number;
+  seats: number;
+  price: number;
+  taken: string[];
 }
