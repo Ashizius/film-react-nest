@@ -1,4 +1,3 @@
-
 export class GetScheduleDTO {
   items: ISchedule[];
   get total(): number {

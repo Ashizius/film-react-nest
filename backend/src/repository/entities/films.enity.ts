@@ -1,5 +1,5 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinTable, JoinColumn} from "typeorm";
-import { Schedules } from "./schedules.entity";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Schedules } from './schedules.entity';
 /*
     rating      double precision                not null,
     director    varchar                         not null,
@@ -14,32 +14,32 @@ import { Schedules } from "./schedules.entity";
 @Entity()
 export class Films {
   @PrimaryGeneratedColumn('uuid')
-  id: string
+  id: string;
 
   @Column('double precision')
-  rating: number
+  rating: number;
 
   @Column('varchar')
-  director: string
+  director: string;
 
   @Column('simple-array')
-  tags: string[]
+  tags: string[];
 
   @Column('varchar')
-  image: string
+  image: string;
 
   @Column('varchar')
-  cover: string
+  cover: string;
 
   @Column('varchar')
-  title: string
+  title: string;
 
   @Column('varchar')
-  about: string
+  about: string;
 
   @Column('varchar')
-  description: string
+  description: string;
 
-  @OneToMany(()  => Schedules, (schedules) => schedules.film)
+  @OneToMany(() => Schedules, (schedules) => schedules.film)
   schedule: Schedules[];
 }

@@ -3,7 +3,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import * as path from 'node:path';
 
-import { ConfigProvider } from './app.config.provider';
 import { FilmsController } from './films/films.controller';
 import { OrderController } from './order/order.controller';
 import { FilmsService } from './films/films.service';
@@ -33,9 +32,6 @@ import { Schedules } from './repository/entities/schedules.entity';
     RepositoryModule,
     // Configure TypeOrmModule to access DatabaseModule using an async factory function
     TypeOrmModule.forRootAsync({
-      // Import the AppConfigModule
-      //imports: [AppConfigModule],
-      // Inject ConfigService to dynamically retrieve configuration
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         const dbType = configService.get<'postgres'>(
@@ -56,6 +52,6 @@ import { Schedules } from './repository/entities/schedules.entity';
     }),
   ],
   controllers: [FilmsController, OrderController],
-  providers: [ConfigProvider, FilmsService, OrderService],
+  providers: [FilmsService, OrderService],
 })
 export class AppModule {}

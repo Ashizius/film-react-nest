@@ -1,16 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { AppConfig } from '../app.config.provider';
+import { Injectable } from '@nestjs/common';
 import { DataSource, Like, Repository } from 'typeorm';
 
 import { IFilm } from '../films/dto/films.dto';
 import { IBookResult, ITicket } from '../order/dto/order.dto';
-import { Mongoose } from 'mongoose';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Films } from './entities/films.enity';
 import { Schedules } from './entities/schedules.entity';
-import { In } from 'typeorm';
 import { faker } from '@faker-js/faker';
-import { error } from 'console';
 
 export interface IFilmRepository {
   findAll(): Promise<[number, IFilm[]]>;
@@ -20,14 +16,14 @@ export interface IFilmRepository {
 
 @Injectable()
 export class RepositoryProvider {
-  public readonly films: IFilmRepository;
   constructor(
+    private dataSource: DataSource,
     @InjectRepository(Films)
     private filmsRepository: Repository<Films>,
     @InjectRepository(Schedules)
     private schedulesRepository: Repository<Schedules>,
-    private dataSource: DataSource,
   ) {}
+
   async getFilms(): Promise<[number, IFilm[]]> {
     const films = await this.filmsRepository.find({
       order: {
@@ -36,6 +32,7 @@ export class RepositoryProvider {
     });
     return [films.length, films];
   }
+
   async getSchedule(id: string): Promise<IFilm> {
     const film = await this.filmsRepository.findOne({
       where: { id },

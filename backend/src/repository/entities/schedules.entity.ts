@@ -1,7 +1,11 @@
-
-
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn} from "typeorm";
-import { Films } from "./films.enity";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { Films } from './films.enity';
 /*
     id       uuid default uuid_generate_v4() not null
         constraint "PK_7e33fc2ea755a5765e3564e66dd"
@@ -17,30 +21,30 @@ import { Films } from "./films.enity";
 @Entity()
 export class Schedules {
   @PrimaryGeneratedColumn('uuid')
-  id: string
+  id: string;
 
   @Column('varchar')
-  daytime: string
+  daytime: string;
 
   @Column('integer')
-  hall: number
+  hall: number;
 
   @Column('integer')
-  rows: number
+  rows: number;
 
   @Column('integer')
-  seats: number
+  seats: number;
 
   @Column('double precision')
-  price: number
+  price: number;
 
   @Column('simple-array')
-  taken: string[]
+  taken: string[];
 
   @Column('uuid')
-  filmId: string
+  filmId: string;
 
   @ManyToOne(() => Films, (films) => films.id)
-  @JoinColumn({name : 'filmId'})
+  @JoinColumn({ name: 'filmId' })
   film: Films;
 }
