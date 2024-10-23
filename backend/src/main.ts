@@ -5,7 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './all-exceptions/all-exceptions.filter';
 import { HttpAdapterHost } from '@nestjs/core';
 
-const { PORT = 3000 } = process.env;
+const PORT = parseInt(process.env.PORT);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
