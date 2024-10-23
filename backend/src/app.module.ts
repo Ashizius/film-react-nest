@@ -3,18 +3,23 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import * as path from 'node:path';
 
-import { configProvider } from './app.config.provider';
 import { FilmsController } from './films/films.controller';
 import { OrderController } from './order/order.controller';
 import { FilmsService } from './films/films.service';
 import { RepositoryModule } from './repository/repository.module';
 import { OrderService } from './order/order.service';
+import configuration, { AppConfigDatabase } from './configuration';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
+import { Films } from './repository/entities/films.enity';
+import { Schedules } from './repository/entities/schedules.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
+      load: [configuration],
     }),
     ServeStaticModule.forRoot({
       // раздача статических файлов из public
@@ -25,8 +30,27 @@ import { OrderService } from './order/order.service';
       },
     }),
     RepositoryModule,
+    // Configure TypeOrmModule to access DatabaseModule using an async factory function
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        const { type, host, port, database, credentials } =
+          configService.get<AppConfigDatabase>('database');
+        const { username, password } = credentials;
+        return {
+          type,
+          host,
+          port,
+          username,
+          password,
+          database,
+          entities: [Films, Schedules],
+          synchronize: false,
+        };
+      },
+    }),
   ],
   controllers: [FilmsController, OrderController],
-  providers: [configProvider, FilmsService, OrderService],
+  providers: [FilmsService, OrderService],
 })
 export class AppModule {}

@@ -12,7 +12,10 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
   private checkDBException(error: Error) {
     if (error.message) {
       const isNotFound = error.message.indexOf('not found') >= 0;
-      const isCastError = error.message.indexOf('Cast to ObjectId failed') >= 0;
+      const isCastError =
+        error.message.indexOf('Cast to ObjectId failed') >= 0 ||
+        error.message.indexOf('invalid input syntax for type uuid') >= 0;
+
       if (isNotFound || isCastError) {
         return new NotFoundException(
           'запись не найдена или передан некорректный id',
