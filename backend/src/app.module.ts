@@ -8,7 +8,7 @@ import { OrderController } from './order/order.controller';
 import { FilmsService } from './films/films.service';
 import { RepositoryModule } from './repository/repository.module';
 import { OrderService } from './order/order.service';
-import configuration from './configuration';
+import configuration, { AppConfigDatabase } from './configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Films } from './repository/entities/films.enity';
@@ -34,18 +34,17 @@ import { Schedules } from './repository/entities/schedules.entity';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const dbType = configService.get<'postgres'>(
-          'DATABASE_DRIVER',
-          'postgres',
-        );
+        const { type, host, port, database, credentials } =
+          configService.get<AppConfigDatabase>('database');
+        const { username, password } = credentials;
         return {
-          type: dbType, //Тип драйвера Postgres
-          host: configService.get('DATABASE_HOST', 'localhost'), //Адрес сервера базы данных
-          port: configService.get('DATABASE_PORT', 5432), //Postgres порт
-          username: configService.get('DATABASE_USERNAME', 'prac'), //Логин и пароль пользователя,
-          password: configService.get('DATABASE_PASSWORD', 'prac'), //  для доступа к БД.
-          database: configService.get('DATABASE_DATABASE', 'prac'), //Имя базы данных
-          entities: [Films, Schedules], //сущности, которые описывают нашу базу данных
+          type,
+          host,
+          port,
+          username,
+          password,
+          database,
+          entities: [Films, Schedules],
           synchronize: false,
         };
       },

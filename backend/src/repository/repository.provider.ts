@@ -81,28 +81,35 @@ export class RepositoryProvider {
       }
       await Promise.all(tickets.map(this.takeSeatQueryMapper.bind(this)));
 
-      const orders = await this.schedulesRepository.find({
+      const newSchedule = await this.schedulesRepository.find({
         where: tickets.map(this.IsTakenSeatQueryMapper.bind(this)),
       });
-      await queryRunner.commitTransaction();
 
-      return tickets.map((ticket) => {
-        const { id, filmId, ...order } = orders.find(
-          (order) => order.id === ticket.session,
+      const orderResult = tickets.map(({ row, seat, session }) => {
+        const { id, filmId, ...schedule } = newSchedule.find(
+          (schedule) => schedule.id === session,
         );
-        delete order.seats;
-        delete order.rows;
-        delete order.taken;
-        delete order.film;
+        if (
+          schedule.taken.filter((takenOne) => takenOne === `${row}:${seat}`)
+            .length !== 1
+        ) {
+          throw new Error('не найдено свободного места');
+        }
+        delete schedule.seats;
+        delete schedule.rows;
+        delete schedule.taken;
+        delete schedule.film;
         return {
           id: faker.string.uuid(),
-          ...order,
+          ...schedule,
           film: filmId,
           session: id,
-          seat: ticket.seat,
-          row: ticket.row,
+          seat: seat,
+          row: row,
         };
       });
+      await queryRunner.commitTransaction();
+      return orderResult;
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw err;
