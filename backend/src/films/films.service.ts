@@ -1,25 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { GetFilmsDTO, GetScheduleDTO } from './dto/films.dto';
-import { Repository } from '../repository/repository';
+import { RepositoryProvider } from '../repository/repository.provider';
 
 @Injectable()
 export class FilmsService {
-  constructor(private readonly repository: Repository) {}
+  constructor(private readonly repository: RepositoryProvider) {}
   async findAll(): Promise<GetFilmsDTO> {
-    const [total, films] = await this.repository.filmsRepository.findAll();
-    if (total === 0) {
-      return {
-        items: [],
-        total: 0,
-      };
-    }
+    const [total, films] = await this.repository.getFilms();
     return {
       items: films,
       total: total,
     };
   }
   async findSchedule(id: string): Promise<GetScheduleDTO> {
-    const film = await this.repository.filmsRepository.findOne(id);
+    const film = await this.repository.getSchedule(id);
     if (!film) {
       throw new NotFoundException('Фильм не найден');
     }

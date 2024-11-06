@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
-import { FilmsRepository } from './films.repository';
-import { Repository } from './repository';
-import { configProvider } from '../app.config.provider';
+import { RepositoryProvider } from './repository.provider';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Films } from './entities/films.enity';
+import { Schedules } from './entities/schedules.entity';
 
 @Module({
-  providers: [configProvider, FilmsRepository, Repository],
-  exports: [Repository],
+  imports: [TypeOrmModule.forFeature([Films, Schedules])],
+  providers: [RepositoryProvider],
+  exports: [RepositoryProvider],
 })
 export class RepositoryModule {}

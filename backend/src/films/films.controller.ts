@@ -5,13 +5,13 @@ import { GetFilmsDTO, GetScheduleDTO } from './dto/films.dto';
 @Controller('films')
 export class FilmsController {
   constructor(private readonly filmsService: FilmsService) {}
-  @Get() // этот метод будет вызван для запроса GET /films
+  @Get()
   async findAll(): Promise<GetFilmsDTO> {
     const filmsDTO = await this.filmsService.findAll();
     return filmsDTO;
   }
 
-  @Get(':id/schedule') // этот метод будет вызван для запроса GET /films
+  @Get(':id/schedule')
   async findSchedule(@Param('id') id: string): Promise<GetScheduleDTO> {
     const schedule = await this.filmsService.findSchedule(id);
     return schedule;

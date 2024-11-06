@@ -5,7 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './all-exceptions/all-exceptions.filter';
 import { HttpAdapterHost } from '@nestjs/core';
 
-const { PORT = 3000 } = process.env
+const PORT = parseInt(process.env.PORT);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +14,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
-  await app.listen(PORT||3000);
+  await app.listen(PORT || 3000);
 }
 bootstrap();
