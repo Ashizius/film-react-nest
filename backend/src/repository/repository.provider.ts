@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, Like, Repository } from 'typeorm';
 
 import { IFilm } from '../films/dto/films.dto';
@@ -17,6 +17,7 @@ export interface IFilmRepository {
 @Injectable()
 export class RepositoryProvider {
   constructor(
+    @Inject(DataSource)
     private dataSource: DataSource,
     @InjectRepository(Films)
     private filmsRepository: Repository<Films>,

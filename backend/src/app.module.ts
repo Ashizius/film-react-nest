@@ -13,6 +13,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Films } from './repository/entities/films.enity';
 import { Schedules } from './repository/entities/schedules.entity';
+import { LoggerModule } from './logger/logger.module';
+import { DevLogger } from './logger/dev.logger';
+import { JsonLogger } from './logger/json.logger';
 
 @Module({
   imports: [
@@ -49,8 +52,9 @@ import { Schedules } from './repository/entities/schedules.entity';
         };
       },
     }),
+    LoggerModule
   ],
   controllers: [FilmsController, OrderController],
-  providers: [FilmsService, OrderService],
+  providers: [FilmsService, OrderService, DevLogger, JsonLogger],
 })
 export class AppModule {}
