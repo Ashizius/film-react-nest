@@ -1,0 +1,76 @@
+version: "3.9"
+services:
+  backend:
+    build:
+      context: ./backend # директория сборки (контекст)
+    image: "ashizius/film-backend:node20-alpine"
+    env_file:
+      - ./backend/.env
+    environment:
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+    restart: "no"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    healthcheck:
+      test: "wget -nv -t1 --spider 'http://localhost:3000/'"
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - internal
+    volumes:
+      - ./backend/dist:/var/www/app/dist
+      - public:/var/www/app/public
+
+  frontend:
+    build:
+      context: ./frontend # директория сборки (контекст)
+    image: "ashizius/film-frontend:node20-alpine"
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
+    volumes:
+      - frontend:/var/www/app
+
+  postgres:
+    image: "postgres:16"
+    restart: "no"
+    ports:
+      - "5432:5432"
+      - 8080:8080
+    environment:
+      POSTGRES_PASSWORD: prac
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      # монтируем директорию ./pg-data основной ОС в директорию с данными в контейнере
+      - ./pg-data:/var/lib/postgresql/data/pgdata
+    networks:
+      - internal
+
+  server:
+    build:
+      context: ./nginx
+    image: "ashizius/film-server:nginx"
+    ports:
+      - 80:80
+    networks:
+      - internal
+    volumes:
+      - frontend:/var/www/app
+      - public:/var/www/app/public
+    depends_on:
+      - frontend
+
+
+volumes:
+  frontend:
+  public:
+  db:
+
+networks:
+  internal:

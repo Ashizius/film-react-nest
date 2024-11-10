@@ -1,8 +1,6 @@
 import { Controller, Get, Inject, LoggerService, Param } from '@nestjs/common';
 import { FilmsService } from './films.service';
 import { GetFilmsDTO, GetScheduleDTO } from './dto/films.dto';
-import { DevLogger } from '../logger/dev.logger';
-import { loggerProvider } from '../logger/logger.provider';
 import { Providers } from '../configuration';
 
 @Controller('films')
