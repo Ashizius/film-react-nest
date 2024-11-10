@@ -10,8 +10,8 @@ services:
       - DATABASE_HOST=postgres
       - DATABASE_PORT=5432
     restart: "no"
-    ports:
-      - "3000:3000"
+#    ports:
+#      - "3000:3000"
     depends_on:
       - postgres
     healthcheck:
@@ -35,14 +35,14 @@ services:
     depends_on:
       - backend
     volumes:
-      - frontend:/var/www/app
+      - ./frontend/dist:/var/www/app/dist
 
   postgres:
     image: "postgres:16"
     restart: "no"
-    ports:
-      - "5432:5432"
-      - 8080:8080
+#    ports:
+#      - "5432:5432"
+#      - 8080:8080
     environment:
       POSTGRES_PASSWORD: prac
       PGDATA: /var/lib/postgresql/data/pgdata
@@ -60,8 +60,9 @@ services:
       - 80:80
     networks:
       - internal
+      - internet
     volumes:
-      - frontend:/var/www/app
+      - ./frontend/dist:/var/www/app/frontend
       - public:/var/www/app/public
     depends_on:
       - frontend
@@ -73,4 +74,10 @@ volumes:
   db:
 
 networks:
+  default:
+    internal: true
   internal:
+    internal: true
+    driver: bridge
+  internet:
+    driver: bridge
