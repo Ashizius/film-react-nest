@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ServeStaticModule } from '@nestjs/serve-static';
+//import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
-import * as path from 'node:path';
+//import * as path from 'node:path';
 
 import { FilmsController } from './films/films.controller';
 import { OrderController } from './order/order.controller';
@@ -24,14 +24,14 @@ import { JsonLogger } from './logger/json.logger';
       cache: true,
       load: [configuration],
     }),
-    ServeStaticModule.forRoot({
+    /*ServeStaticModule.forRoot({
       // раздача статических файлов из public
       rootPath: path.join(__dirname, '..', 'public'),
       serveStaticOptions: {
         //кеширование
         maxAge: 10 * 1000, // милисекунды
       },
-    }),
+    }),*/
     RepositoryModule,
     // Configure TypeOrmModule to access DatabaseModule using an async factory function
     TypeOrmModule.forRootAsync({

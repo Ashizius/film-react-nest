@@ -24,7 +24,6 @@ services:
       - internal
     volumes:
       - ./backend/dist:/var/www/app/dist
-      - public:/var/www/app/public
 
   frontend:
     build:
@@ -63,7 +62,7 @@ services:
       - internet
     volumes:
       - ./frontend/dist:/var/www/app/frontend
-      - public:/var/www/app/public
+      - ./backend/public/content:/var/www/app/frontend/content
     depends_on:
       - frontend
 
