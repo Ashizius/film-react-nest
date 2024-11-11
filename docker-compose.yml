@@ -61,8 +61,11 @@ services:
       - internal
       - internet
     volumes:
-      - frontendvolume:/var/www/app/frontend
-      - ./backend/public/content:/var/www/app/frontend/content
+      - type: volume
+        source: frontendvolume
+        target: /var/www/app/frontend
+        read_only: true
+      - ./backend/public/content:/var/www/app/frontend/content:ro
     depends_on:
       - frontend
 
