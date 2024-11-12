@@ -1,0 +1,12 @@
+#RUN ufw allow 'Nginx Full'
+#RUN ufw allow OpenSSH
+#RUN ufw enable
+#RUN systemctl enable --now nginx
+
+FROM ubuntu
+RUN apt-get -y update && apt-get -y install nginx
+COPY ngnix.conf /etc/nginx/sites-available/backend.conf
+RUN ln -s /etc/nginx/sites-available/backend.conf /etc/nginx/sites-enabled/backend.conf
+#RUN nginx -t
+RUN systemctl reload nginx
+CMD ["/usr/sbin/nginx", "-g", "daemon off;"]

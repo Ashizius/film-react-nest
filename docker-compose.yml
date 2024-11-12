@@ -1,9 +1,9 @@
 version: "3.9"
 services:
   backend:
+    image: ghcr.io/ashizius/film-react-nest_backend:latest
     build:
       context: ./backend # директория сборки (контекст)
-    image: "ashizius/film-backend:node20-alpine"
     env_file:
       - ./backend/.env
     environment:
@@ -26,9 +26,9 @@ services:
 #      - ./backend/dist:/var/www/app/dist
 
   frontend:
+    image: ghcr.io/ashizius/film-react-nest_frontend:latest
     build:
       context: ./frontend # директория сборки (контекст)
-    image: "ashizius/film-frontend:node20-alpine"
     env_file:
       - ./frontend/.env
     depends_on:
@@ -42,9 +42,8 @@ services:
 #    ports:
 #      - "5432:5432"
 #      - 8080:8080
-    environment:
-      POSTGRES_PASSWORD: prac
-      PGDATA: /var/lib/postgresql/data/pgdata
+    env_file:
+      - ./.env
     volumes:
       # монтируем директорию ./pg-data основной ОС в директорию с данными в контейнере
       - ./pg-data:/var/lib/postgresql/data/pgdata
@@ -52,20 +51,17 @@ services:
       - internal
 
   server:
+    image: ghcr.io/ashizius/film-react-nest_nginx:latest
     build:
       context: ./nginx
-    image: "ashizius/film-server:nginx"
     ports:
       - 80:80
     networks:
       - internal
       - internet
     volumes:
-      - type: volume
-        source: frontendvolume
-        target: /var/www/app/frontend
-        read_only: true
-      - ./backend/public/content:/var/www/app/frontend/content:ro
+      - frontendvolume:/var/www/app/frontend
+      - ./backend/public/content:/var/www/app/frontend/content
     depends_on:
       - frontend
 
