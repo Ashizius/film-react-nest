@@ -3,7 +3,6 @@ import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { RepositoryProvider } from '../repository/repository.provider';
 import { repositoryMock } from '../repository/repository.spec';
-import { RepositoryModule } from '../repository/repository.module';
 
 describe('OrderController', () => {
   let controller: OrderController;

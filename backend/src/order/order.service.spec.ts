@@ -8,10 +8,13 @@ describe('OrderService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [OrderService,        {
-        provide: RepositoryProvider,
-        useValue: repositoryMock,
-      },],
+      providers: [
+        OrderService,
+        {
+          provide: RepositoryProvider,
+          useValue: repositoryMock,
+        },
+      ],
     }).compile();
 
     service = module.get<OrderService>(OrderService);

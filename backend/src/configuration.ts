@@ -14,25 +14,24 @@ export interface AppConfigDatabase {
 export interface AppConfig {
   database: AppConfigDatabase;
   port: number;
-  logger: `${LoggerType}`|null;
+  logger: `${LoggerType}` | null;
 }
 
-export enum LoggerType{
-  dev='DEV',
-  tskv='TSKV',
-  json='JSON'
+export enum LoggerType {
+  dev = 'DEV',
+  tskv = 'TSKV',
+  json = 'JSON',
 }
 
-export enum Providers{
-  logger='LOGGER',
-  config='CONFIG'
+export enum Providers {
+  logger = 'LOGGER',
+  config = 'CONFIG',
 }
-
 
 export default () =>
   <AppConfig>{
     port: parseInt(process.env.PORT) || 3000,
-    logger: process.env.LOGGER||null,
+    logger: process.env.LOGGER || null,
     database: {
       host: process.env.DATABASE_HOST || 'localhost',
       type: process.env.DATABASE_DRIVER || 'postgres',

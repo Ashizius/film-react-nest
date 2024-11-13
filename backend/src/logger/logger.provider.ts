@@ -9,5 +9,5 @@ export const loggerProvider = {
     const logger = await switchLogger(config.get('logger'));
     return new logger();
   },
-  inject: [ConfigService]
-}
+  inject: [ConfigService],
+};

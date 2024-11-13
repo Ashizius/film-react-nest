@@ -5,7 +5,7 @@ export class TSKVconverter {
   constructor(val: any, name?: string) {
     this.queue = new Map();
     this.processed = new Set();
-    this.line = new Array();
+    this.line = [];
     this.process(name, val);
   }
 
@@ -34,7 +34,7 @@ export class TSKVconverter {
     this.line.push(`${prefix + 'month '}=${String(date.getMonth())}`);
     this.line.push(`${prefix + 'year'}=${String(date.getFullYear())}`);
     this.line.push(
-      `${prefix + 'time'}=${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}:${String(date.getSeconds()).padStart(2, "0")}`,
+      `${prefix + 'time'}=${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`,
     );
   }
 
@@ -58,14 +58,14 @@ export class TSKVconverter {
   }
 
   public timestamp() {
-    const date=new Date();
+    const date = new Date();
     this.line.unshift(
-      `${'time'}=${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}:${String(date.getSeconds()).padStart(2, "0")}`,
+      `${'time'}=${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`,
     );
     this.line.unshift(`${'year'}=${String(date.getFullYear())}`);
     this.line.unshift(`${'month '}=${String(date.getMonth())}`);
     this.line.unshift(`${'day'}=${String(date.getDate())}`);
-    return this
+    return this;
   }
 
   public add(val: any, name?: string) {

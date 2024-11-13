@@ -1,9 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RepositoryProvider } from './repository.provider';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Films } from './entities/films.enity';
-import { Schedules } from './entities/schedules.entity';
-import { DataSource } from 'typeorm';
 
 export const repositoryMock = {
   getFilms: jest.fn(),
@@ -16,10 +12,12 @@ describe('RepositoryProvider', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [{
-        provide:RepositoryProvider,
-        useValue: repositoryMock
-      }],
+      providers: [
+        {
+          provide: RepositoryProvider,
+          useValue: repositoryMock,
+        },
+      ],
     }).compile();
 
     provider = module.get<RepositoryProvider>(RepositoryProvider);

@@ -1,4 +1,3 @@
-
 import { LoggerService, Injectable, Scope } from '@nestjs/common';
 
 @Injectable({ scope: Scope.TRANSIENT })
@@ -15,5 +14,4 @@ export class JsonLogger implements LoggerService {
   warn(message: any, ...optionalParams: any[]) {
     console.log(this.formatMessage('warn', message, ...optionalParams));
   }
-
 }

@@ -3,14 +3,13 @@ import { FilmsController } from './films.controller';
 import { FilmsService } from './films.service';
 import { RepositoryProvider } from '../repository/repository.provider';
 import { repositoryMock } from '../repository/repository.spec';
-import { DevLogger } from '../logger/dev.logger';
 import { Providers } from '../configuration';
 
 export const loggerMock = {
-  log:jest.fn(),
-  warn:jest.fn(),
-  error:jest.fn(),
-}
+  log: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+};
 
 describe('FilmsController', () => {
   let controller: FilmsController;

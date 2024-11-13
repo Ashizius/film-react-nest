@@ -52,7 +52,7 @@ import { JsonLogger } from './logger/json.logger';
         };
       },
     }),
-    LoggerModule
+    LoggerModule,
   ],
   controllers: [FilmsController, OrderController],
   providers: [FilmsService, OrderService, DevLogger, JsonLogger],

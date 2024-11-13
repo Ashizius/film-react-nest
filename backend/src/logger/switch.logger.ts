@@ -1,7 +1,9 @@
-import { ConsoleLogger, LoggerService } from "@nestjs/common";
-import { LoggerType } from "../configuration";
+import { ConsoleLogger, LoggerService } from '@nestjs/common';
+import { LoggerType } from '../configuration';
 
-export default async (loggerType: `${LoggerType}`): Promise<new ()=> LoggerService>=>{
+export default async (
+  loggerType: `${LoggerType}`,
+): Promise<new () => LoggerService> => {
   switch (loggerType) {
     case LoggerType.json:
       const { JsonLogger } = await import('./json.logger');
@@ -13,6 +15,6 @@ export default async (loggerType: `${LoggerType}`): Promise<new ()=> LoggerServi
       const { TskvLogger } = await import('./tskv.logger');
       return TskvLogger;
     default:
-      return ConsoleLogger
+      return ConsoleLogger;
   }
-}
+};

@@ -16,8 +16,7 @@ async function bootstrap() {
   const { httpAdapter } = app.get(HttpAdapterHost);
   //настройки:
   const port = config.get<number>('port');
-  let loggerType: `${LoggerType}`; //config.get<number>('port');
-  loggerType = config.get<`${LoggerType}`>('logger');
+  const loggerType = config.get<`${LoggerType}`>('logger');
 
   //настройка путей и заголовков Cors
   app.setGlobalPrefix('api/afisha');
