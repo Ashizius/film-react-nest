@@ -19,5 +19,5 @@
 
 
 ## развёрнутое приложение
-[ссылка на запущенное приложение](ashizius.nomorepartiesco.ru)
+[ссылка на запущенное приложение](http://ashizius.nomorepartiesco.ru)
 
